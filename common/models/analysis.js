@@ -13,6 +13,7 @@ module.exports = function(Analysis) {
     mapPhoto = 'hola';
     results = firstPhotoId.toString();
     // TODO
-    callback(null, mapPhoto, results);
+    var x = {mapPhoto: mapPhoto, results: results};
+    callback(null, x);
   };
 };
