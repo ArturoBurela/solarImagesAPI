@@ -15,7 +15,4 @@ module.exports = function(Analysis) {
     // TODO
     callback(null, mapPhoto, results);
   };
-
-  Analysis.remoteMethod('start');
-
 };
