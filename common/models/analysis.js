@@ -7,7 +7,7 @@ module.exports = function(Analysis) {
    * @param {number} lastPhotoId Last photo Id to stop analysis
    * @param {Function(Error, string, object)} callback
    */
-  const exec = require('child_process');
+  const exec = require('child_process').exec;
 
   Analysis.start = function(firstPhotoId, lastPhotoId, callback) {
     var mapPhoto, results;
