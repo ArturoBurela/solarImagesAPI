@@ -1,0 +1,61 @@
+{
+  "name": "analysis",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "runtime": {
+      "type": "number",
+      "required": true
+    },
+    "status": {
+      "type": "string",
+      "required": true,
+      "default": "ok"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {
+    "start": {
+      "accepts": [
+        {
+          "arg": "firstPhotoId",
+          "type": "number",
+          "required": true,
+          "description": "First photo Id to start analysis"
+        },
+        {
+          "arg": "lastPhotoId",
+          "type": "number",
+          "required": true,
+          "description": "Last photo Id to stop analysis"
+        }
+      ],
+      "returns": [
+        {
+          "arg": "mapPhoto",
+          "type": "string",
+          "root": true,
+          "description": "map of the area"
+        },
+        {
+          "arg": "results",
+          "type": "object",
+          "root": true,
+          "description": "Object of results"
+        }
+      ],
+      "description": "Start images analysis",
+      "http": [
+        {
+          "path": "start",
+          "verb": "post"
+        }
+      ]
+    }
+  }
+}
