@@ -11,7 +11,7 @@ module.exports = function(Analysis) {
   Analysis.start = function(firstPhotoId, lastPhotoId, callback) {
     var mapPhoto, results;
     mapPhoto = 'hola';
-    results = {};
+    results = firstPhotoId.toString();
     // TODO
     callback(null, mapPhoto, results);
   };
