@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (Analysis) {
+module.exports = function(Analysis) {
   /**
    * Start images analysis
    * @param {number} firstPhotoId First photo Id to start analysis
