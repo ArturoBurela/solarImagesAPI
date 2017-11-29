@@ -52,7 +52,7 @@
       "description": "Start images analysis",
       "http": [
         {
-          "path": "start",
+          "path": "/start",
           "verb": "post"
         }
       ]
