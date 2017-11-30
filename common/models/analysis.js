@@ -7,7 +7,7 @@ module.exports = function(Analysis) {
    * @param {number} lastPhotoId Last photo Id to stop analysis
    * @param {Function(Error, string, object)} callback
    */
-  const exec = require('child_process').exec;
+  const exec = require('child_process').execSync;
   const cv = require('opencv');
   const image = '/home/ODMProjects/test/odm_orthophoto/odm_orthophoto.tif';
   const BLUE = [255, 0, 0]; // B, G, R
@@ -20,18 +20,7 @@ module.exports = function(Analysis) {
   var nIters = 2;
   var minArea = 2000;
 
-  Analysis.start = function(firstPhotoId, lastPhotoId, callback) {
-    mapPhoto = 'hola';
-    results = firstPhotoId.toString();
-    // Get all images from blobstore and store them locally
-    // Use OpenDrone
-    cmd = 'python /usr/local/OpenDrone/run.py -i /home/tempImages/ test';
-    exec(cmd, function(error, stdout, stderr) {
-      // command output is in stdout
-      console.log(error);
-      console.log(stdout);
-      console.log(stderr);
-    });
+  function runObjectDetection() {
     cv.readImage(image, function(err, im) {
       if (err) throw err;
       var width = im.width();
@@ -61,6 +50,21 @@ module.exports = function(Analysis) {
       out.save('detect-shapes.png');
       console.log('Image saved to detect-shapes.png');
     });
+  }
+
+  Analysis.start = function(firstPhotoId, lastPhotoId, callback) {
+    mapPhoto = 'hola';
+    results = firstPhotoId.toString();
+    // Get all images from blobstore and store them locally
+    // Use OpenDrone
+    cmd = 'python /usr/local/OpenDrone/run.py -i /home/tempImages/ test';
+    exec(cmd, function(error, stdout, stderr) {
+      // command output is in stdout
+      console.log(error);
+      console.log(stdout);
+      console.log(stderr);
+    });
+    runObjectDetection();
     // Identify Objects in global map image
     // Convert map to base 64
     // return map picture and results
