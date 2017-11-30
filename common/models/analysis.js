@@ -107,7 +107,7 @@ module.exports = function(Analysis) {
       console.log(stderr);
     });
     // Command to delete tmpImages
-    cmd = 'rm -rf /home/tempImages';
+    cmd = 'rm -rf /home/tempImages/*';
     exec(cmd, function(error, stdout, stderr) {
       // command output is in stdout
       console.log(error);
