@@ -31,7 +31,7 @@ module.exports = function(Analysis) {
     var RED = [0, 0, 255]; // B, G, R
     var GREEN = [0, 255, 0]; // B, G, R
     var WHITE = [255, 255, 255]; // B, G, R
-    cv.readImage('/home/ODMProjects/test/odm_orthophoto/odm_orthophoto.png', function(err, im) {
+    cv.readImage('/home/ODMProjects/test/odm_orthophoto/odm_orthophoto.tif', function(err, im) {
       if (err) throw err;
       var width = im.width();
       var height = im.height();
