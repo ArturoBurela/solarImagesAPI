@@ -9,6 +9,7 @@ module.exports = function(Analysis) {
    */
   const exec = require('child_process').execSync;
   const cv = require('opencv');
+  const fs = require('fs');
   const image = '/home/ODMProjects/test/odm_orthophoto/odm_orthophoto.tif';
   const BLUE = [255, 0, 0]; // B, G, R
   const RED = [0, 0, 255]; // B, G, R
@@ -20,18 +21,35 @@ module.exports = function(Analysis) {
   var nIters = 2;
   var minArea = 2000;
 
-  function runObjectDetection() {
+  function openDroneMap() {
+    // Execute python command to call openDrone
+    cmd = 'python /usr/local/OpenDrone/run.py -i /home/tempImages/ test';
+    exec(cmd, function(error, stdout, stderr) {
+      // command output is in stdout
+      console.log(error);
+      console.log(stdout);
+      console.log(stderr);
+    });
+  }
+
+  function objectDetection() {
     cv.readImage(image, function(err, im) {
       if (err) throw err;
+      // Get image width and height
       var width = im.width();
       var height = im.height();
       if (width < 1 || height < 1) throw new Error('Image has no size');
+      // New matrix of image size
       var out = new cv.Matrix(height, width);
       im.convertGrayscale();
+      // Use canny algorithms
       var imCanny = im.copy();
+      // Set threshold
       imCanny.canny(lowThresh, highThresh);
       imCanny.dilate(nIters);
+      // Use canny to find contours
       var contours = imCanny.findContours();
+      // Iterate through contours to draw and create result
       for (var i = 0; i < contours.size(); i++) {
         if (contours.area(i) < minArea) continue;
         var arcLength = contours.arcLength(i, true);
@@ -47,25 +65,41 @@ module.exports = function(Analysis) {
             out.drawContour(contours, i, WHITE);
         }
       }
-      out.save('detect-shapes.png');
-      console.log('Image saved to detect-shapes.png');
+      // Save
+      out.save('shapes.png');
+      console.log('Borders image saved correctly');
     });
+  }
+
+  // function to encode file data to base64 encoded string
+  function base64Encode(file) {
+    // read binary data
+    var bitmap = fs.readFileSync(file);
+    // convert binary data to base64 encoded string
+    return new Buffer(bitmap).toString('base64');
+  }
+
+// function to create file from base64 encoded string
+  function base64Decode(base64str, file) {
+    // create buffer object from base64 encoded string, it is important to tell the constructor that the string is base64 encoded
+    var bitmap = new Buffer(base64str, 'base64');
+    // write buffer to file
+    fs.writeFileSync(file, bitmap);
+    console.log('******** File created from base64 encoded string ********');
+  }
+
+  function getImages() {
   }
 
   Analysis.start = function(firstPhotoId, lastPhotoId, callback) {
     mapPhoto = 'hola';
     results = firstPhotoId.toString();
     // Get all images from blobstore and store them locally
+    getImages();
     // Use OpenDrone
-    cmd = 'python /usr/local/OpenDrone/run.py -i /home/tempImages/ test';
-    exec(cmd, function(error, stdout, stderr) {
-      // command output is in stdout
-      console.log(error);
-      console.log(stdout);
-      console.log(stderr);
-    });
-    runObjectDetection();
+    openDroneMap();
     // Identify Objects in global map image
+    objectDetection();
     // Convert map to base 64
     // return map picture and results
     callback(null, {mapPhoto: mapPhoto, results: results});
