@@ -85,22 +85,59 @@ module.exports = function(Analysis) {
     var bitmap = new Buffer(base64str, 'base64');
     // write buffer to file
     fs.writeFileSync(file, bitmap);
-    console.log('******** File created from base64 encoded string ********');
   }
 
   function getImages() {
+    cmd = 'cp /home/imagesSD/* /home/tempImages';
+    exec(cmd, function(error, stdout, stderr) {
+      // command output is in stdout
+      console.log(error);
+      console.log(stdout);
+      console.log(stderr);
+    });
+  }
+
+  function clean() {
+    // Command to delete ODM Project
+    cmd = 'rm -rf /home/ODMProjects/test/';
+    exec(cmd, function(error, stdout, stderr) {
+      // command output is in stdout
+      console.log(error);
+      console.log(stdout);
+      console.log(stderr);
+    });
+    // Command to delete tmpImages
+    cmd = 'rm -rf /home/tempImages';
+    exec(cmd, function(error, stdout, stderr) {
+      // command output is in stdout
+      console.log(error);
+      console.log(stdout);
+      console.log(stderr);
+    });
+    // Delete borders png
+    cmd = 'rm /home/solarImagesAPI/shapes.png';
+    exec(cmd, function(error, stdout, stderr) {
+      // command output is in stdout
+      console.log(error);
+      console.log(stdout);
+      console.log(stderr);
+    });
   }
 
   Analysis.start = function(firstPhotoId, lastPhotoId, callback) {
-    mapPhoto = 'hola';
-    results = firstPhotoId.toString();
+    results = {};
     // Get all images from blobstore and store them locally
     getImages();
-    // Use OpenDrone
+    // Use OpenDrone to create mapPhoto
     openDroneMap();
     // Identify Objects in global map image
     objectDetection();
     // Convert map to base 64
+    mapPhoto = base64Encode(image);
+    // Return temp shapes images as result
+    results = base64Encode('/home/solarImagesAPI/shapes.png');
+    // Delete files to save space
+    clean();
     // return map picture and results
     callback(null, {mapPhoto: mapPhoto, results: results});
   };
