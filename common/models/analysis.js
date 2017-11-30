@@ -127,17 +127,15 @@ module.exports = function(Analysis) {
   Analysis.start = function(firstPhotoId, lastPhotoId, callback) {
     results = {};
     // Get all images from blobstore and store them locally
-    getImages();
+    // getImages();
     // Use OpenDrone to create mapPhoto
     openDroneMap();
     // Identify Objects in global map image
     objectDetection();
     // Convert map to base 64
     mapPhoto = base64Encode(image);
-    // Return temp shapes images as result
-    results = base64Encode('/home/solarImagesAPI/shapes.png');
     // Delete files to save space
-    clean();
+    // clean();
     // return map picture and results
     callback(null, {mapPhoto: mapPhoto, results: results});
   };
