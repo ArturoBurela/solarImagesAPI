@@ -9,29 +9,30 @@ module.exports = function(Analysis) {
    */
   const exec = require('child_process').exec;
   const cv = require('opencv');
+  const image = '/home/ODMProjects/test/odm_orthophoto/odm_orthophoto.tif';
+  const BLUE = [255, 0, 0]; // B, G, R
+  const RED = [0, 0, 255]; // B, G, R
+  const GREEN = [0, 255, 0]; // B, G, R
+  const WHITE = [255, 255, 255]; // B, G, R
+  var mapPhoto, results, cmd;
+  var lowThresh = 0;
+  var highThresh = 100;
+  var nIters = 2;
+  var minArea = 2000;
 
   Analysis.start = function(firstPhotoId, lastPhotoId, callback) {
-    var mapPhoto, results;
     mapPhoto = 'hola';
     results = firstPhotoId.toString();
     // Get all images from blobstore and store them locally
     // Use OpenDrone
-    var cmd = 'pwd';
+    cmd = 'python /usr/local/OpenDrone/run.py -i /home/tempImages/ test';
     exec(cmd, function(error, stdout, stderr) {
       // command output is in stdout
       console.log(error);
       console.log(stdout);
       console.log(stderr);
     });
-    var lowThresh = 0;
-    var highThresh = 100;
-    var nIters = 2;
-    var minArea = 2000;
-    var BLUE = [255, 0, 0]; // B, G, R
-    var RED = [0, 0, 255]; // B, G, R
-    var GREEN = [0, 255, 0]; // B, G, R
-    var WHITE = [255, 255, 255]; // B, G, R
-    cv.readImage('/home/ODMProjects/test/odm_orthophoto/odm_orthophoto.tif', function(err, im) {
+    cv.readImage(image, function(err, im) {
       if (err) throw err;
       var width = im.width();
       var height = im.height();
@@ -58,12 +59,11 @@ module.exports = function(Analysis) {
         }
       }
       out.save('detect-shapes.png');
-      console.log('Image saved to ./tmp/detect-shapes.png');
+      console.log('Image saved to detect-shapes.png');
     });
     // Identify Objects in global map image
     // Convert map to base 64
     // return map picture and results
-    var x = {mapPhoto: mapPhoto, results: results};
-    callback(null, x);
+    callback(null, {mapPhoto: mapPhoto, results: results});
   };
 };
