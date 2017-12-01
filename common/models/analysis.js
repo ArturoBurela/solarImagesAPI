@@ -464,11 +464,17 @@ module.exports = function(Analysis) {
     // Read geo center of photo in UTM format and convert it to Lat,Long
     fs.readFile(UTMFile, 'utf8', function(err, data) {
       if (err) throw err;
+      var x, y, zone, north;
       var s = data.split(/\n/);
-      s = s[0].split(' ') + s[1].split(' ');
       console.log(s);
+      var s1 = s[0].split(' ');
+      var s2 = s[1].split(' ');
+      console.log(s1);
+      console.log(s2);
+      x = Number(s2[0]);
+      y = Number(s2[1]);
       console.log('Computing conv');
-      // var latlon = new Array(2);
+      var latlon = new Array(2);
       // UTMXYToLatLon(437036, 4572789, 17, false, latlon);
       // latlon[0] = RadToDeg(latlon[0]);
       // latlon[1] = RadToDeg(latlon[1]);
