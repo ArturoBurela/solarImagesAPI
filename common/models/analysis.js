@@ -12,7 +12,14 @@ module.exports = function(Analysis) {
   const fs = require('fs');
   const ODMDir = '/home/ODMProjects/test/';
   const image = ODMDir + 'odm_orthophoto/odm_orthophoto.tif';
-  const cornersFile = ODMDir + 'odm_orthophoto/odm_orthophoto_corners.txt';
+  const UMTFile = ODMDir + 'odm_georeferencing/odm_georeferencing_model_geo.txt';
+  /*
+  * console.log('Computing conv');
+    var latlon = new Array(2);
+    UTMXYToLatLon(437036, 4572789, 17, false, latlon);
+    latlon[0] = RadToDeg(latlon[0]);
+    latlon[1] = RadToDeg(latlon[1]);
+    console.log(latlon); */
   const BLUE = [255, 0, 0]; // B, G, R
   const RED = [0, 0, 255]; // B, G, R
   const GREEN = [0, 255, 0]; // B, G, R
@@ -461,15 +468,9 @@ module.exports = function(Analysis) {
   }
 
   function readCoordinates() {
-    fs.readFile(cornersFile, 'utf8', function(err, data) {
+    fs.readFile(UMTFile, 'utf8', function(err, data) {
       if (err) throw err;
-      var x = data.split(' ');
-      corners = new Array(4);
-      corners[0] = Number(x[0]);
-      corners[1] = Number(x[1]);
-      corners[2] = Number(x[2]);
-      corners[3] = Number(x[3]);
-      console.log(corners);
+      console.log(data);
     });
   }
 
@@ -487,12 +488,6 @@ module.exports = function(Analysis) {
 
   function objectDetection() {
     console.log('Running object detection');
-    console.log('Computing conv');
-    var latlon = new Array(2)
-    UTMXYToLatLon(437036, 4572789, 17, false, latlon);
-    latlon[0] = RadToDeg(latlon[0]);
-    latlon[2] = RadToDeg(latlon[1]);
-    console.log(latlon);
     readCoordinates();
     cv.readImage(image, function(err, im) {
       if (err) throw err;
