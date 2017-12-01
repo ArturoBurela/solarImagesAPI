@@ -82,6 +82,7 @@ module.exports = function(Analysis) {
       // Iterate through contours to draw and create result
       for (var i = 0; i < contours.size(); i++) {
         if (contours.area(i) < minArea) continue;
+        console.log(contours[i]);
         var arcLength = contours.arcLength(i, true);
         contours.approxPolyDP(i, 0.001 * arcLength, true);
         switch (contours.cornerCount(i)) {
@@ -95,7 +96,6 @@ module.exports = function(Analysis) {
             out.drawContour(contours, i, WHITE);
         }
       }
-      console.log(out);
       // Save
       out.save('shapes.png');
       console.log('Borders image saved correctly');
