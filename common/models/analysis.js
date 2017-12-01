@@ -10,7 +10,9 @@ module.exports = function(Analysis) {
   const exec = require('child_process').execSync;
   const cv = require('opencv');
   const fs = require('fs');
-  const image = '/home/ODMProjects/test/odm_orthophoto/odm_orthophoto.tif';
+  const ODMDir = '/home/ODMProjects/test/';
+  const image = ODMDir + 'odm_orthophoto/odm_orthophoto.tif';
+  const cornersFile = ODMDir + 'odm_orthophoto/odm_orthophoto_corners.txt';
   const BLUE = [255, 0, 0]; // B, G, R
   const RED = [0, 0, 255]; // B, G, R
   const GREEN = [0, 255, 0]; // B, G, R
@@ -33,8 +35,29 @@ module.exports = function(Analysis) {
     });
   }
 
+  function readCoordinates() {
+    fs.readFile(cornersFile, 'utf8', function(err, data) {
+      if (err) throw err;
+      console.log('OK: ' + cornersFile);
+      console.log(data);
+    });
+  }
+
+  function measure(lat1, lon1, lat2, lon2) {  // generally used geo measurement function
+    var R = 6378.137; // Radius of earth in KM
+    var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+    var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+    var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    var d = R * c;
+    return d * 1000; // meters
+  }
+
   function objectDetection() {
     console.log('Running object detection');
+    readCoordinates();
     cv.readImage(image, function(err, im) {
       if (err) throw err;
       // Get image width and height
@@ -132,19 +155,12 @@ module.exports = function(Analysis) {
   Analysis.start = function(firstPhotoId, lastPhotoId, callback) {
     results = {};
     // Get all images from blobstore and store them locally
-    getImages();
+    // getImages();
     // Use OpenDrone to create mapPhoto
     openDroneMap();
     // Identify Objects in global map image
     objectDetection();
     // Convert map to base 64
-    console.log('Converting photo');
-    var bitmap = fs.readFileSync(image);
-    // convert binary data to base64 encoded string
-    var x = Buffer(bitmap).toString('base64');
-    // Delete files to save space
-    // clean();
-    mapPhoto = x;
     // return map picture and results
     callback(null, {mapPhoto: mapPhoto, results: results});
   };
