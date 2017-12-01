@@ -17,7 +17,7 @@ module.exports = function(Analysis) {
   const RED = [0, 0, 255]; // B, G, R
   const GREEN = [0, 255, 0]; // B, G, R
   const WHITE = [255, 255, 255]; // B, G, R
-  var mapPhoto, results, cmd;
+  var mapPhoto, results, cmd, corners;
   var lowThresh = 0;
   var highThresh = 100;
   var nIters = 2;
@@ -38,8 +38,12 @@ module.exports = function(Analysis) {
   function readCoordinates() {
     fs.readFile(cornersFile, 'utf8', function(err, data) {
       if (err) throw err;
-      console.log('OK: ' + cornersFile);
-      console.log(data);
+      var x = data.split(' ');
+      corners[0] = Number(x[0]);
+      corners[1] = Number(x[1]);
+      corners[2] = Number(x[2]);
+      corners[3] = Number(x[3]);
+      console.log(corners);
     });
   }
 
