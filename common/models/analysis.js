@@ -472,16 +472,10 @@ module.exports = function(Analysis) {
       north = s1[2].charAt(s1[2].length - 1) == 'N' ? false : true;
       x = Number(s2[0]);
       y = Number(s2[1]);
-      console.log(x);
-      console.log(y);
-      console.log(north);
-      console.log(zone);
-      console.log('Computing conv');
       var latlon = new Array(2);
       UTMXYToLatLon(x, y, zone, north, latlon);
       latlon[0] = RadToDeg(latlon[0]);
       latlon[1] = RadToDeg(latlon[1]);
-      console.log(latlon);
     });
   }
 
@@ -499,8 +493,8 @@ module.exports = function(Analysis) {
 
   function objectDetection() {
     console.log('Running object detection');
-    readCoordinates();
     cv.readImage(image, function(err, im) {
+      readCoordinates();
       if (err) throw err;
       // Get image width and height
       var width = im.width();
