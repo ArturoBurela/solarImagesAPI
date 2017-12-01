@@ -12,14 +12,7 @@ module.exports = function(Analysis) {
   const fs = require('fs');
   const ODMDir = '/home/ODMProjects/test/';
   const image = ODMDir + 'odm_orthophoto/odm_orthophoto.tif';
-  const UMTFile = ODMDir + 'odm_georeferencing/odm_georeferencing_model_geo.txt';
-  /*
-  * console.log('Computing conv');
-    var latlon = new Array(2);
-    UTMXYToLatLon(437036, 4572789, 17, false, latlon);
-    latlon[0] = RadToDeg(latlon[0]);
-    latlon[1] = RadToDeg(latlon[1]);
-    console.log(latlon); */
+  const UTMFile = ODMDir + 'odm_georeferencing/odm_georeferencing_model_geo.txt';
   const BLUE = [255, 0, 0]; // B, G, R
   const RED = [0, 0, 255]; // B, G, R
   const GREEN = [0, 255, 0]; // B, G, R
@@ -468,9 +461,18 @@ module.exports = function(Analysis) {
   }
 
   function readCoordinates() {
-    fs.readFile(UMTFile, 'utf8', function(err, data) {
+    // Read geo center of photo in UTM format and convert it to Lat,Long
+    fs.readFile(UTMFile, 'utf8', function(err, data) {
       if (err) throw err;
-      console.log(data);
+      var s = data.split(/\n/);
+      s = s.split(' ');
+      console.log(s);
+      console.log('Computing conv');
+      // var latlon = new Array(2);
+      // UTMXYToLatLon(437036, 4572789, 17, false, latlon);
+      // latlon[0] = RadToDeg(latlon[0]);
+      // latlon[1] = RadToDeg(latlon[1]);
+      // console.log(latlon);
     });
   }
 
