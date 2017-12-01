@@ -82,9 +82,10 @@ module.exports = function(Analysis) {
       // Iterate through contours to draw and create result
       for (var i = 0; i < contours.size(); i++) {
         if (contours.area(i) < minArea) continue;
-        console.log(contours[i]);
         var arcLength = contours.arcLength(i, true);
         contours.approxPolyDP(i, 0.001 * arcLength, true);
+        var point = contours.point(contours, i);
+        console.log('(' + point.x + ',' + point.y + ')');
         switch (contours.cornerCount(i)) {
           case 3:
             out.drawContour(contours, i, GREEN);
