@@ -472,6 +472,10 @@ module.exports = function(Analysis) {
       north = s1[2].charAt(s1[2].length - 1) == 'N' ? true : false;
       x = Number(s2[0]);
       y = Number(s2[1]);
+      console.log(x);
+      console.log(y);
+      console.log(north);
+      console.log(zone);
       console.log('Computing conv');
       var latlon = new Array(2);
       UTMXYToLatLon(x, y, zone, north, latlon);
