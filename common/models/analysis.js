@@ -465,7 +465,7 @@ module.exports = function(Analysis) {
     fs.readFile(UTMFile, 'utf8', function(err, data) {
       if (err) throw err;
       var s = data.split(/\n/);
-      s = s.split(' ');
+      s = s[0].split(' ') + s[1].split(' ');
       console.log(s);
       console.log('Computing conv');
       // var latlon = new Array(2);
