@@ -462,7 +462,7 @@ module.exports = function(Analysis) {
 
   function readCoordinates() {
     // Read geo center of photo in UTM format and convert it to Lat,Long
-    fs.readFile(UTMFile, 'utf8', function(err, data) {
+    fs.readFileSync(UTMFile, 'utf8', function(err, data) {
       if (err) throw err;
       var x, y, zone, north;
       var s = data.split(/\n/);
@@ -476,6 +476,7 @@ module.exports = function(Analysis) {
       UTMXYToLatLon(x, y, zone, north, latlon);
       latlon[0] = RadToDeg(latlon[0]);
       latlon[1] = RadToDeg(latlon[1]);
+      console.log('Dione loainasd');
     });
   }
 
@@ -493,8 +494,9 @@ module.exports = function(Analysis) {
 
   function objectDetection() {
     console.log('Running object detection');
+    // Load Lat Long of image center
+    readCoordinates();
     cv.readImage(image, function(err, im) {
-      readCoordinates();
       if (err) throw err;
       // Get image width and height
       var width = im.width();
