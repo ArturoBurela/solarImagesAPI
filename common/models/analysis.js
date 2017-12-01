@@ -84,8 +84,6 @@ module.exports = function(Analysis) {
         if (contours.area(i) < minArea) continue;
         var arcLength = contours.arcLength(i, true);
         contours.approxPolyDP(i, 0.001 * arcLength, true);
-        var point = contours.point(contours, i);
-        console.log('(' + point.x + ',' + point.y + ')');
         switch (contours.cornerCount(i)) {
           case 3:
             out.drawContour(contours, i, GREEN);
@@ -95,6 +93,10 @@ module.exports = function(Analysis) {
             break;
           default:
             out.drawContour(contours, i, WHITE);
+        }
+        for (var c = 0; c < contours.cornerCount(i); ++c) {
+          var point = contours.point(i, c);
+          console.log('(' + point.x + ',' + point.y + ')');
         }
       }
       // Save
