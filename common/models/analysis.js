@@ -78,7 +78,8 @@ module.exports = function(Analysis) {
     // read binary data
     var bitmap = fs.readFileSync(file);
     // convert binary data to base64 encoded string
-    return new Buffer(bitmap).toString('base64');
+    var base64Image = new Buffer(bitmap, 'binary').toString('base64');
+    return new base64Image; // Buffer(bitmap).toString('base64');
   }
 
 // function to create file from base64 encoded string
