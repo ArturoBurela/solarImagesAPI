@@ -22,6 +22,7 @@ module.exports = function(Analysis) {
   var minArea = 2000;
 
   function openDroneMap() {
+    console.log('Runnig open drone map');
     // Execute python command to call openDrone
     cmd = 'python /usr/local/OpenDrone/run.py -i /home/tempImages/ test';
     exec(cmd, function(error, stdout, stderr) {
@@ -33,6 +34,7 @@ module.exports = function(Analysis) {
   }
 
   function objectDetection() {
+    console.log('Running object detection');
     cv.readImage(image, function(err, im) {
       if (err) throw err;
       // Get image width and height
@@ -88,6 +90,7 @@ module.exports = function(Analysis) {
   }
 
   function getImages() {
+    console.log('Running copy of images');
     cmd = 'cp /home/imagesSD/* /home/tempImages';
     exec(cmd, function(error, stdout, stderr) {
       // command output is in stdout
@@ -127,7 +130,7 @@ module.exports = function(Analysis) {
   Analysis.start = function(firstPhotoId, lastPhotoId, callback) {
     results = {};
     // Get all images from blobstore and store them locally
-    // getImages();
+    getImages();
     // Use OpenDrone to create mapPhoto
     openDroneMap();
     // Identify Objects in global map image
