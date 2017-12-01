@@ -139,9 +139,12 @@ module.exports = function(Analysis) {
     objectDetection();
     // Convert map to base 64
     console.log('Converting photo');
-    // mapPhoto = base64Encode(image);
+    var bitmap = fs.readFileSync(image);
+    // convert binary data to base64 encoded string
+    var x = Buffer(bitmap).toString('base64');
     // Delete files to save space
     // clean();
+    mapPhoto = x;
     // return map picture and results
     callback(null, {mapPhoto: mapPhoto, results: results});
   };
