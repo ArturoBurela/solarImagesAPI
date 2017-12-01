@@ -79,6 +79,7 @@ module.exports = function(Analysis) {
     var bitmap = fs.readFileSync(file);
     // convert binary data to base64 encoded string
     var base64Image = new Buffer(bitmap, 'binary').toString('base64');
+    console.log('Done encoding');
     return base64Image; // Buffer(bitmap).toString('base64');
   }
 
@@ -139,6 +140,7 @@ module.exports = function(Analysis) {
     // Convert map to base 64
     console.log('Converting photo');
     mapPhoto = base64Encode(image);
+    console.log('Map photo ' + mapPhoto);
     console.log('done converting');
     // Delete files to save space
     // clean();
