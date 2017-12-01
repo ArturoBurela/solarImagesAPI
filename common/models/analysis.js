@@ -471,14 +471,16 @@ module.exports = function(Analysis) {
       var s2 = s[1].split(' ');
       console.log(s1);
       console.log(s2);
+      zone = Number(s1[2].substring(0, s1[2].length - 2));
+      north = s1[2].charAt(s1[2].length - 1) == 'N' ? true : false;
       x = Number(s2[0]);
       y = Number(s2[1]);
       console.log('Computing conv');
       var latlon = new Array(2);
-      // UTMXYToLatLon(437036, 4572789, 17, false, latlon);
-      // latlon[0] = RadToDeg(latlon[0]);
-      // latlon[1] = RadToDeg(latlon[1]);
-      // console.log(latlon);
+      UTMXYToLatLon(437036, 4572789, 17, false, latlon);
+      latlon[0] = RadToDeg(latlon[0]);
+      latlon[1] = RadToDeg(latlon[1]);
+      console.log(latlon);
     });
   }
 
