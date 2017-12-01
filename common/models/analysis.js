@@ -143,6 +143,7 @@ module.exports = function(Analysis) {
     // Delete files to save space
     // clean();
     // return map picture and results
+    mapPhoto = 'lol';
     callback(null, {mapPhoto: mapPhoto, results: results});
   };
 };
