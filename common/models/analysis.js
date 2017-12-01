@@ -95,6 +95,7 @@ module.exports = function(Analysis) {
             out.drawContour(contours, i, WHITE);
         }
       }
+      console.log(contours);
       // Save
       out.save('shapes.png');
       console.log('Borders image saved correctly');
