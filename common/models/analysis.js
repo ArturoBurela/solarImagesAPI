@@ -489,7 +489,9 @@ module.exports = function(Analysis) {
     console.log('Running object detection');
     console.log('Computing conv');
     var latlon = new Array(2)
-    UTMXYToLatLon(437036, 4572789, 17, true, latlon);
+    UTMXYToLatLon(437036, 4572789, 17, false, latlon);
+    latlon[0] = RadToDeg(latlon[0]);
+    latlon[2] = RadToDeg(latlon[1]);
     console.log(latlon);
     readCoordinates();
     cv.readImage(image, function(err, im) {
