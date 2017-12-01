@@ -139,7 +139,7 @@ module.exports = function(Analysis) {
     objectDetection();
     // Convert map to base 64
     console.log('Converting photo');
-    mapPhoto = base64Encode(image);
+    // mapPhoto = base64Encode(image);
     // Delete files to save space
     // clean();
     // return map picture and results
