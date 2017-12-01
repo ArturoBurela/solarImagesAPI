@@ -494,8 +494,7 @@ module.exports = function(Analysis) {
     console.log('Running object detection');
     // Load Lat Long of image center
     readCoordinates(function() {
-      console.log(latlon);
-      cv.readImage(image, function(err, im) {
+      cv.readImage('/home/simple.jpg', function(err, im) {
         if (err) throw err;
         // Get image width and height
         var width = im.width();
@@ -528,7 +527,7 @@ module.exports = function(Analysis) {
           }
           for (var c = 0; c < contours.cornerCount(i); ++c) {
             var point = contours.point(i, c);
-            // console.log('(' + point.x + ',' + point.y + ')');
+            console.log('(' + point.x + ',' + point.y + ')');
           }
         }
         // Save
