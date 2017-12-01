@@ -39,6 +39,7 @@ module.exports = function(Analysis) {
     fs.readFile(cornersFile, 'utf8', function(err, data) {
       if (err) throw err;
       var x = data.split(' ');
+      corners = new Array(4);
       corners[0] = Number(x[0]);
       corners[1] = Number(x[1]);
       corners[2] = Number(x[2]);
