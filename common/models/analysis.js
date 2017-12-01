@@ -460,7 +460,7 @@ module.exports = function(Analysis) {
     });
   }
 
-  function readCoordinates() {
+  function readCoordinates(callback) {
     // Read geo center of photo in UTM format and convert it to Lat,Long
     fs.readFile(UTMFile, 'utf8', function(err, data) {
       if (err) throw err;
@@ -474,7 +474,7 @@ module.exports = function(Analysis) {
       UTMXYToLatLon(x, y, zone, north, latlon);
       latlon[0] = RadToDeg(latlon[0]);
       latlon[1] = RadToDeg(latlon[1]);
-      console.log('Dione loainasd');
+      callback();
     });
   }
 
@@ -493,47 +493,48 @@ module.exports = function(Analysis) {
   function objectDetection() {
     console.log('Running object detection');
     // Load Lat Long of image center
-    readCoordinates();
-    console.log(latlon);
-    cv.readImage(image, function(err, im) {
-      if (err) throw err;
-      // Get image width and height
-      var width = im.width();
-      var height = im.height();
-      if (width < 1 || height < 1) throw new Error('Image has no size');
-      // New matrix of image size
-      var out = new cv.Matrix(height, width);
-      im.convertGrayscale();
-      // Use canny algorithms
-      var imCanny = im.copy();
-      // Set threshold
-      imCanny.canny(lowThresh, highThresh);
-      imCanny.dilate(nIters);
-      // Use canny to find contours
-      var contours = imCanny.findContours();
-      // Iterate through contours to draw and create result
-      for (var i = 0; i < contours.size(); i++) {
-        if (contours.area(i) < minArea) continue;
-        var arcLength = contours.arcLength(i, true);
-        contours.approxPolyDP(i, 0.001 * arcLength, true);
-        switch (contours.cornerCount(i)) {
-          case 3:
-            out.drawContour(contours, i, GREEN);
-            break;
-          case 4:
-            out.drawContour(contours, i, RED);
-            break;
-          default:
-            out.drawContour(contours, i, WHITE);
+    readCoordinates(function() {
+      console.log(latlon);
+      cv.readImage(image, function(err, im) {
+        if (err) throw err;
+        // Get image width and height
+        var width = im.width();
+        var height = im.height();
+        if (width < 1 || height < 1) throw new Error('Image has no size');
+        // New matrix of image size
+        var out = new cv.Matrix(height, width);
+        im.convertGrayscale();
+        // Use canny algorithms
+        var imCanny = im.copy();
+        // Set threshold
+        imCanny.canny(lowThresh, highThresh);
+        imCanny.dilate(nIters);
+        // Use canny to find contours
+        var contours = imCanny.findContours();
+        // Iterate through contours to draw and create result
+        for (var i = 0; i < contours.size(); i++) {
+          if (contours.area(i) < minArea) continue;
+          var arcLength = contours.arcLength(i, true);
+          contours.approxPolyDP(i, 0.001 * arcLength, true);
+          switch (contours.cornerCount(i)) {
+            case 3:
+              out.drawContour(contours, i, GREEN);
+              break;
+            case 4:
+              out.drawContour(contours, i, RED);
+              break;
+            default:
+              out.drawContour(contours, i, WHITE);
+          }
+          for (var c = 0; c < contours.cornerCount(i); ++c) {
+            var point = contours.point(i, c);
+            // console.log('(' + point.x + ',' + point.y + ')');
+          }
         }
-        for (var c = 0; c < contours.cornerCount(i); ++c) {
-          var point = contours.point(i, c);
-          // console.log('(' + point.x + ',' + point.y + ')');
-        }
-      }
-      // Save
-      out.save('shapes.png');
-      console.log('Borders image saved correctly');
+        // Save
+        out.save('shapes.png');
+        console.log('Borders image saved correctly');
+      });
     });
   }
 
