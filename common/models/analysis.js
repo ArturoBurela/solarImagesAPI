@@ -17,12 +17,12 @@ module.exports = function(Analysis) {
   const RED = [0, 0, 255]; // B, G, R
   const GREEN = [0, 255, 0]; // B, G, R
   const WHITE = [255, 255, 255]; // B, G, R
-  var mapPhoto, results, cmd, corners;
+  var mapPhoto, results, cmd, x, y, zone, north;
   var lowThresh = 0;
   var highThresh = 100;
   var nIters = 2;
   var minArea = 2000;
-
+  var latlon = new Array(2);
   var pi = 3.14159265358979;
 
   /* Ellipsoid model constants (actual values here are for WGS84) */
@@ -464,7 +464,6 @@ module.exports = function(Analysis) {
     // Read geo center of photo in UTM format and convert it to Lat,Long
     fs.readFileSync(UTMFile, 'utf8', function(err, data) {
       if (err) throw err;
-      var x, y, zone, north;
       var s = data.split(/\n/);
       var s1 = s[0].split(' ');
       var s2 = s[1].split(' ');
@@ -472,7 +471,6 @@ module.exports = function(Analysis) {
       north = s1[2].charAt(s1[2].length - 1) == 'N' ? false : true;
       x = Number(s2[0]);
       y = Number(s2[1]);
-      var latlon = new Array(2);
       UTMXYToLatLon(x, y, zone, north, latlon);
       latlon[0] = RadToDeg(latlon[0]);
       latlon[1] = RadToDeg(latlon[1]);
@@ -496,6 +494,7 @@ module.exports = function(Analysis) {
     console.log('Running object detection');
     // Load Lat Long of image center
     readCoordinates();
+    console.log(latlon);
     cv.readImage(image, function(err, im) {
       if (err) throw err;
       // Get image width and height
