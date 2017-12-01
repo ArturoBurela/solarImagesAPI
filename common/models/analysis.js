@@ -462,7 +462,7 @@ module.exports = function(Analysis) {
 
   function readCoordinates() {
     // Read geo center of photo in UTM format and convert it to Lat,Long
-    fs.readFileSync(UTMFile, 'utf8', function(err, data) {
+    fs.readFile(UTMFile, 'utf8', function(err, data) {
       if (err) throw err;
       var s = data.split(/\n/);
       var s1 = s[0].split(' ');
