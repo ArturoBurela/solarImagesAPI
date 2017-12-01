@@ -489,7 +489,7 @@ module.exports = function(Analysis) {
     console.log('Running object detection');
     console.log('Computing conv');
     var latlon = new Array(2)
-    UTMXYToLatLon(437036, 4572789, 17, false, latlon);
+    UTMXYToLatLon(437036, 4572789, 17, true, latlon);
     console.log(latlon);
     readCoordinates();
     cv.readImage(image, function(err, im) {
@@ -525,7 +525,7 @@ module.exports = function(Analysis) {
         }
         for (var c = 0; c < contours.cornerCount(i); ++c) {
           var point = contours.point(i, c);
-          console.log('(' + point.x + ',' + point.y + ')');
+          // console.log('(' + point.x + ',' + point.y + ')');
         }
       }
       // Save
