@@ -136,7 +136,9 @@ module.exports = function(Analysis) {
     // Identify Objects in global map image
     objectDetection();
     // Convert map to base 64
+    console.log('Converting photo');
     mapPhoto = base64Encode(image);
+    console.log('done converting');
     // Delete files to save space
     // clean();
     // return map picture and results
