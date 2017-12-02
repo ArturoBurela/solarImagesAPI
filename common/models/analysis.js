@@ -474,6 +474,7 @@ module.exports = function(Analysis) {
       y = Number(s2[1]);
       // Compute lat, long coordinates of the photo
       UTMXYToLatLon(x, y, zone, north, center);
+      console.log(center);
       center[0] = RadToDeg(center[0]);
       center[1] = RadToDeg(center[1]);
       // Read borders bounds in UTM
@@ -554,8 +555,8 @@ module.exports = function(Analysis) {
             var point = contours.point(i, c);
             x1 = ((point.x * change) + corner[0]);
             y1 = ((point.y * change) + corner[1]);
-            UTMXYToLatLon(x1, y1, zone, north, p);
-            console.log(p);
+            // UTMXYToLatLon(x1, y1, zone, north, p);
+            // console.log(p);
           }
         }
         // Save
