@@ -492,7 +492,7 @@ module.exports = function(Analysis) {
         console.log(bounds[3]);
         // Calculate UTM pos of one corner
         corner[0] = x + bounds[0];
-        corner[1] = y + bounds[1];
+        corner[1] = y + bounds[3];
         callback();
       });
     });
@@ -514,7 +514,7 @@ module.exports = function(Analysis) {
     console.log('Running object detection');
     // Load Lat Long of image center
     readCoordinates(function() {
-      cv.readImage('simple.jpg', function(err, im) {
+      cv.readImage(image, function(err, im) {
         if (err) throw err;
         // Get image width and height
         var width = im.width();
@@ -549,9 +549,13 @@ module.exports = function(Analysis) {
               out.drawContour(contours, i, WHITE);
           }
           var p = new Array(2);
+          var x1, y1;
           for (var c = 0; c < contours.cornerCount(i); ++c) {
             var point = contours.point(i, c);
-            console.log('(' + point.x + ',' + point.y + ')');
+            x1 = ((point.x * change) + corner[0]);
+            y1 = ((point.y * change) + corner[1]);
+            UTMXYToLatLon(x, y, zone, north, p);
+            console.log(p);
           }
         }
         // Save
