@@ -486,6 +486,11 @@ module.exports = function(Analysis) {
         bounds[1] = Number(s[1]);
         bounds[2] = Number(s[2]);
         bounds[3] = Number(s[3]);
+        console.log('Bounds:');
+        console.log(bounds[0]);
+        console.log(bounds[1]);
+        console.log(bounds[2]);
+        console.log(bounds[3]);
         // Calculate the lat long for bounds
         var c1 = x + bounds[0];
         var c2 = x + bounds[2];
