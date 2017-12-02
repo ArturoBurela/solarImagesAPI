@@ -24,8 +24,7 @@ module.exports = function(Analysis) {
   var nIters = 2;
   var minArea = 2000;
   var center = new Array(2);
-  var corner1 = new Array(2);
-  var corner2 = new Array(2);
+  var corner = new Array(2);
   var pi = 3.14159265358979;
   /* Ellipsoid model constants (actual values here are for WGS84) */
   var smA = 6378137.0;
@@ -491,12 +490,9 @@ module.exports = function(Analysis) {
         console.log(bounds[1]);
         console.log(bounds[2]);
         console.log(bounds[3]);
-        // Calculate the lat long for bounds
-        var c1 = x + bounds[0];
-        var c2 = x + bounds[2];
-        UTMXYToLatLon(c1, y, zone, north, corner1);
-        UTMXYToLatLon(c2, y, zone, north, corner2);
-        // Calculate change in lat, long per pixel
+        // Calculate UTM pos of one corner
+        corner[0] = x + bounds[0];
+        corner[1] = y + bounds[1];
         callback();
       });
     });
@@ -518,7 +514,7 @@ module.exports = function(Analysis) {
     console.log('Running object detection');
     // Load Lat Long of image center
     readCoordinates(function() {
-      cv.readImage(image, function(err, im) {
+      cv.readImage('simple.jpg', function(err, im) {
         if (err) throw err;
         // Get image width and height
         var width = im.width();
@@ -552,9 +548,10 @@ module.exports = function(Analysis) {
             default:
               out.drawContour(contours, i, WHITE);
           }
+          var p = new Array(2);
           for (var c = 0; c < contours.cornerCount(i); ++c) {
             var point = contours.point(i, c);
-            // console.log('(' + point.x + ',' + point.y + ')');
+            console.log('(' + point.x + ',' + point.y + ')');
           }
         }
         // Save
