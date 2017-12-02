@@ -527,8 +527,7 @@ module.exports = function(Analysis) {
         // New matrix of image size
         var out = new cv.Matrix(height, width);
         // Calculate change in lat, long per pixel
-        var x = corner1[2] - corner2[2];
-        var change = x / width;
+        var change = (Math.abs((x + bounds[0]) - (x + bounds[2]))) / width;
         console.log(change);
         im.convertGrayscale();
         // Use canny algorithms
