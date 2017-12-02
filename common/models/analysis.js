@@ -474,6 +474,10 @@ module.exports = function(Analysis) {
       y = Number(s2[1]);
       // Compute lat, long coordinates of the photo
       UTMXYToLatLon(x, y, zone, true, center);
+      console.log(zone);
+      console.log(north);
+      console.log(x);
+      console.log(y);
       console.log(center);
       center[0] = RadToDeg(center[0]);
       center[1] = RadToDeg(center[1]);
