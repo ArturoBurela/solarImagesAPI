@@ -494,7 +494,7 @@ module.exports = function(Analysis) {
     console.log('Running object detection');
     // Load Lat Long of image center
     readCoordinates(function() {
-      cv.readImage('/home/simple.jpg', function(err, im) {
+      cv.readImage(image, function(err, im) {
         if (err) throw err;
         // Get image width and height
         var width = im.width();
