@@ -473,14 +473,14 @@ module.exports = function(Analysis) {
       x = Number(s2[0]);
       y = Number(s2[1]);
       // Compute lat, long coordinates of the photo
-      UTMXYToLatLon(y, x, zone, false, center);
+      UTMXYToLatLon(x, y, zone, north, center);
+      center[0] = RadToDeg(center[0]);
+      center[1] = RadToDeg(center[1]);
       console.log(zone);
       console.log(north);
       console.log(x);
       console.log(y);
       console.log(center);
-      center[0] = RadToDeg(center[0]);
-      center[1] = RadToDeg(center[1]);
       // Read borders bounds in UTM
       fs.readFile(UTMFile2, 'utf8', function(err, data2) {
         if (err) throw err;
@@ -559,8 +559,10 @@ module.exports = function(Analysis) {
             var point = contours.point(i, c);
             x1 = ((point.x * change) + corner[0]);
             y1 = ((point.y * change) + corner[1]);
-            // UTMXYToLatLon(x1, y1, zone, north, p);
-            // console.log(p);
+            UTMXYToLatLon(x1, y1, zone, north, p);
+            p[0] = RadToDeg(p[0]);
+            p[1] = RadToDeg(p[1]);
+            console.log(p);
           }
         }
         // Save
