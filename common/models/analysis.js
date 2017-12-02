@@ -13,23 +13,24 @@ module.exports = function(Analysis) {
   const ODMDir = '/home/ODMProjects/test/';
   const image = ODMDir + 'odm_orthophoto/odm_orthophoto.tif';
   const UTMFile = ODMDir + 'odm_georeferencing/odm_georeferencing_model_geo.txt';
+  const UTMFile2 = ODMDir + 'odm_orthophoto/odm_orthophoto_corners.txt';
   const BLUE = [255, 0, 0]; // B, G, R
   const RED = [0, 0, 255]; // B, G, R
   const GREEN = [0, 255, 0]; // B, G, R
   const WHITE = [255, 255, 255]; // B, G, R
-  var mapPhoto, results, cmd, x, y, zone, north;
+  var mapPhoto, results, cmd, x, y, zone, north, bounds;
   var lowThresh = 0;
   var highThresh = 100;
   var nIters = 2;
   var minArea = 2000;
-  var latlon = new Array(2);
+  var center = new Array(2);
+  var corner1 = new Array(2);
+  var corner2 = new Array(2);
   var pi = 3.14159265358979;
-
   /* Ellipsoid model constants (actual values here are for WGS84) */
   var smA = 6378137.0;
   var smB = 6356752.314;
   var smEccSquared = 6.69437999013e-03;
-
   var UTMScaleFactor = 0.9996;
 
   /*
@@ -467,14 +468,32 @@ module.exports = function(Analysis) {
       var s = data.split(/\n/);
       var s1 = s[0].split(' ');
       var s2 = s[1].split(' ');
+      // Get UTM zone, north, x and y
       zone = Number(s1[2].substring(0, s1[2].length - 1));
       north = s1[2].charAt(s1[2].length - 1) == 'N' ? false : true;
       x = Number(s2[0]);
       y = Number(s2[1]);
-      UTMXYToLatLon(x, y, zone, north, latlon);
-      latlon[0] = RadToDeg(latlon[0]);
-      latlon[1] = RadToDeg(latlon[1]);
-      callback();
+      // Compute lat, long coordinates of the photo
+      UTMXYToLatLon(x, y, zone, north, center);
+      center[0] = RadToDeg(center[0]);
+      center[1] = RadToDeg(center[1]);
+      // Read borders bounds in UTM
+      fs.readFile(UTMFile2, 'utf8', function(err, data2) {
+        if (err) throw err;
+        var s = data2.split(' ');
+        bounds = new Array(4);
+        bounds[0] = Number(s[0]);
+        bounds[1] = Number(s[1]);
+        bounds[2] = Number(s[2]);
+        bounds[3] = Number(s[3]);
+        // Calculate the lat long for bounds
+        var c1 = x + bounds[0];
+        var c2 = x + bounds[2];
+        UTMXYToLatLon(c1, y, zone, north, corner1);
+        UTMXYToLatLon(c2, y, zone, north, corner2);
+        // Calculate change in lat, long per pixel
+        callback();
+      });
     });
   }
 
@@ -502,6 +521,10 @@ module.exports = function(Analysis) {
         if (width < 1 || height < 1) throw new Error('Image has no size');
         // New matrix of image size
         var out = new cv.Matrix(height, width);
+        // Calculate change in lat, long per pixel
+        var x = corner1[2] - corner2[2];
+        var change = x / width;
+        console.log(change);
         im.convertGrayscale();
         // Use canny algorithms
         var imCanny = im.copy();
