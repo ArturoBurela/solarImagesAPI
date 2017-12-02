@@ -473,7 +473,7 @@ module.exports = function(Analysis) {
       x = Number(s2[0]);
       y = Number(s2[1]);
       // Compute lat, long coordinates of the photo
-      UTMXYToLatLon(x, y, zone, false, center);
+      UTMXYToLatLon(y, x, zone, false, center);
       console.log(zone);
       console.log(north);
       console.log(x);
