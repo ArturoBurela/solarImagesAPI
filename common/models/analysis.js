@@ -554,7 +554,7 @@ module.exports = function(Analysis) {
             var point = contours.point(i, c);
             x1 = ((point.x * change) + corner[0]);
             y1 = ((point.y * change) + corner[1]);
-            UTMXYToLatLon(x, y, zone, north, p);
+            UTMXYToLatLon(x1, y1, zone, north, p);
             console.log(p);
           }
         }
