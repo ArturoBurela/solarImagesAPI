@@ -515,7 +515,7 @@ module.exports = function(Analysis) {
     return d * 1000; // meters
   }
 
-  function objectDetection() {
+  function objectDetection(callback) {
     console.log('Running object detection');
     // Load Lat Long of image center
     readCoordinates(function() {
@@ -573,6 +573,7 @@ module.exports = function(Analysis) {
         // Save
         out.save('shapes.png');
         console.log('Borders image saved correctly');
+        callback();
       });
     });
   }
@@ -640,9 +641,10 @@ module.exports = function(Analysis) {
     // Use OpenDrone to create mapPhoto
     openDroneMap();
     // Identify Objects in global map image
-    objectDetection();
+    objectDetection(function() {
+      callback(null, {mapPhoto: mapPhoto, results: results});
+    });
     // Convert map to base 64
     // return map picture and results
-    callback(null, {mapPhoto: mapPhoto, results: results});
   };
 };
