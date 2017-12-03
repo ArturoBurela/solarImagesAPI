@@ -538,6 +538,7 @@ module.exports = function(Analysis) {
         imCanny.dilate(nIters);
         // Use canny to find contours
         var contours = imCanny.findContours();
+        var j = 0;
         // Iterate through contours to draw and create result
         for (var i = 0; i < contours.size(); i++) {
           if (contours.area(i) < minArea) continue;
@@ -555,6 +556,7 @@ module.exports = function(Analysis) {
           }
           var p = new Array(2);
           var x1, y1;
+          var temp = [];
           for (var c = 0; c < contours.cornerCount(i); ++c) {
             var point = contours.point(i, c);
             x1 = ((point.x * change) + corner[0]);
@@ -562,8 +564,11 @@ module.exports = function(Analysis) {
             UTMXYToLatLon(x1, y1, zone, north, p);
             p[0] = RadToDeg(p[0]);
             p[1] = RadToDeg(p[1]);
+            temp.push(p);
             console.log(p);
           }
+          results[j] = temp;
+          j++;
         }
         // Save
         out.save('shapes.png');
@@ -629,7 +634,7 @@ module.exports = function(Analysis) {
   }
 
   Analysis.start = function(firstPhotoId, lastPhotoId, callback) {
-    results = {};
+    results = [];
     // Get all images from blobstore and store them locally
     // getImages();
     // Use OpenDrone to create mapPhoto
