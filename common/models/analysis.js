@@ -554,25 +554,21 @@ module.exports = function(Analysis) {
             default:
               out.drawContour(contours, i, WHITE);
           }
-          var p = new Array(2);
-          var x1, y1;
           var temp = [];
           for (var c = 0; c < contours.cornerCount(i); ++c) {
+            var p = new Array(2);
+            var x1, y1;
             var point = contours.point(i, c);
             x1 = ((point.x * change) + corner[0]);
             y1 = ((point.y * change) + corner[1]);
             UTMXYToLatLon(x1, y1, zone, north, p);
             p[0] = RadToDeg(p[0]);
             p[1] = RadToDeg(p[1]);
-            //temp.push(p);
+            temp.push(p);
             console.log(p);
-            results.push(p);
-            if(c==contours.cornerCount(i)){
-              results.push('Toño es puto');
-            }
           }
           console.log('ASDASDASNDNASDNAD');
-          //results.push(p);
+          results.push(temp);
         }
         // Save
         out.save('shapes.png');
