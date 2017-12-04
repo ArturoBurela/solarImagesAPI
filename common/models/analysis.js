@@ -566,9 +566,13 @@ module.exports = function(Analysis) {
             p[1] = RadToDeg(p[1]);
             //temp.push(p);
             console.log(p);
+            results.push(p);
+            if(c==contours.cornerCount(i)){
+              results.push('Toño es puto');
+            }
           }
           console.log('ASDASDASNDNASDNAD');
-          results.push(p);
+          //results.push(p);
         }
         // Save
         out.save('shapes.png');
