@@ -564,9 +564,9 @@ module.exports = function(Analysis) {
             UTMXYToLatLon(x1, y1, zone, north, p);
             p[0] = RadToDeg(p[0]);
             p[1] = RadToDeg(p[1]);
-
             console.log(p);
           }
+          console.log('ASDASDASNDNASDNAD');
           results.push(p);
           //results[j] = temp;
           j++;
