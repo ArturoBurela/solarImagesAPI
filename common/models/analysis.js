@@ -642,6 +642,7 @@ module.exports = function(Analysis) {
     openDroneMap();
     // Identify Objects in global map image
     objectDetection(function() {
+      console.log(results.length);
       callback(null, {mapPhoto: mapPhoto, results: results});
     });
     // Convert map to base 64
