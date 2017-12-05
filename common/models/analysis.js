@@ -18,6 +18,7 @@ module.exports = function(Analysis) {
   const RED = [0, 0, 255]; // B, G, R
   const GREEN = [0, 255, 0]; // B, G, R
   const WHITE = [255, 255, 255]; // B, G, R
+  const request = require('request');
   var mapPhoto, results, cmd, x, y, zone, north, bounds;
   var lowThresh = 0;
   var highThresh = 100;
@@ -596,15 +597,15 @@ module.exports = function(Analysis) {
     fs.writeFileSync(file, bitmap);
   }
 
-  function getImages() {
-    console.log('Running copy of images');
-    cmd = 'cp /home/imagesSD/* /home/tempImages';
-    exec(cmd, function(error, stdout, stderr) {
-      // command output is in stdout
-      console.log(error);
-      console.log(stdout);
-      console.log(stderr);
-    });
+  function getImages(id1, id2) {
+    for (var i = id1; i <= id2; i++) {
+      request('https://predix-solar-api.run.aws-usw02-pr.ice.predix.io/api/Photos/' + i, function(error, response, body) {
+        console.log('error:', error); // Print the error if one occurred
+        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
+        var File;
+        base64Decode(body, File);
+      });
+    }
   }
 
   function clean() {
@@ -637,15 +638,15 @@ module.exports = function(Analysis) {
   Analysis.start = function(firstPhotoId, lastPhotoId, callback) {
     results = [];
     // Get all images from blobstore and store them locally
-    // getImages();
+    getImages();
     // Use OpenDrone to create mapPhoto
     openDroneMap();
     // Identify Objects in global map image
     objectDetection(function() {
       console.log(results.length);
+      // Convert map to base 64
+      // return map picture and results
       callback(null, {mapPhoto: mapPhoto, results: results});
     });
-    // Convert map to base 64
-    // return map picture and results
   };
 };
