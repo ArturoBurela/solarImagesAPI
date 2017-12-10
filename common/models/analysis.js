@@ -544,7 +544,7 @@ module.exports = function(Analysis) {
         for (var i = 0; i < contours.size(); i++) {
           if (contours.area(i) < minArea) continue;
           var arcLength = contours.arcLength(i, true);
-          contours.approxPolyDP(i, 0.00001 * arcLength, true);
+          contours.approxPolyDP(i, 0.1 * arcLength, true);
           switch (contours.cornerCount(i)) {
             case 3:
               out.drawContour(contours, i, GREEN);
@@ -573,6 +573,7 @@ module.exports = function(Analysis) {
         // Save
         out.save('shapes.png');
         console.log('Borders image saved correctly');
+        console.log('New console.log');
         callback();
       });
     });
@@ -645,7 +646,7 @@ module.exports = function(Analysis) {
       console.log(results.length);
       // Convert map to base 64
       // return map picture and results
-      callback(null, {mapPhoto: 'hola', results: results});
+      callback(null, {mapPhoto: mapPhoto, results: results});
     });
   };
 };
