@@ -645,7 +645,7 @@ module.exports = function(Analysis) {
       console.log(results.length);
       // Convert map to base 64
       // return map picture and results
-      callback(null, {mapPhoto: mapPhoto, results: results});
+      callback(null, {mapPhoto: 'hola', results: results});
     });
   };
 };
