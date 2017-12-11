@@ -544,7 +544,7 @@ module.exports = function(Analysis) {
         for (var i = 0; i < contours.size(); i++) {
           if (contours.area(i) < minArea) continue;
           var arcLength = contours.arcLength(i, true);
-          contours.approxPolyDP(i, 0.1 * arcLength, true);
+          contours.approxPolyDP(i, 0.05 * arcLength, true);
           switch (contours.cornerCount(i)) {
             case 3:
               out.drawContour(contours, i, GREEN);
