@@ -638,7 +638,7 @@ module.exports = function(Analysis) {
   Analysis.start = function(firstPhotoId, lastPhotoId, callback) {
     results = [];
     // Get all images from blobstore and store them locally
-    // getImages();
+    getImages();
     // Use OpenDrone to create mapPhoto
     openDroneMap();
     // Identify Objects in global map image
